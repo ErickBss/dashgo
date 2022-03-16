@@ -3,8 +3,9 @@ import dynamic from 'next/dynamic'
 import { ApexOptions } from 'apexcharts'
 
 import { Box, Flex, SimpleGrid, Text, theme } from '@chakra-ui/react'
-import { Header } from '../components/Header'
-import { SideBar } from '../components/SideBar'
+import { Header } from '../components/Header/index'
+
+import { SideBar } from '../components/Sidebar/index'
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   //linked with an event like a click or window load

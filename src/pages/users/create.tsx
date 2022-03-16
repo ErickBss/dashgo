@@ -10,8 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { Input } from '../../components/Form/ input'
 
-import { Header } from '../../components/Header'
-import { SideBar } from '../../components/SideBar'
+import { Header } from '../../components/Header/index'
+import { SideBar } from '../../components/Sidebar/index'
 
 export default function UsersList() {
   return (
