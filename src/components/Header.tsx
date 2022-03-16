@@ -1,6 +1,6 @@
-import { Flex, Input, Text, Icon } from '@chakra-ui/react'
+import { Flex, Input, Text, Icon, HStack, Box, Avatar } from '@chakra-ui/react'
 
-import { RiSearchLine } from 'react-icons/ri'
+import { RiNotificationLine, RiSearchLine, RiUserAddLine } from 'react-icons/ri'
 
 export function Header() {
   return (
@@ -42,7 +42,39 @@ export function Header() {
           placeholder="Search in platform"
           _placeholder={{ color: 'gray.400' }}
         />
+
         <Icon as={RiSearchLine} fontSize="20" />
+      </Flex>
+
+      <Flex align="center" ml="auto">
+        <HStack
+          spacing={8}
+          mx={8}
+          pr={8}
+          py={1}
+          color="gray.300"
+          borderRightWidth={1}
+          borderColor="gray.700"
+        >
+          <Icon as={RiNotificationLine} fontSize="20" />
+
+          <Icon as={RiUserAddLine} fontSize="20" />
+        </HStack>
+
+        <Flex align="center">
+          <Box mr={4} textAlign="right">
+            <Text>Erick Souza Basso</Text>
+            <Text color="gray.300" fontSize="small">
+              erickbasso22@gmail.com
+            </Text>
+          </Box>
+
+          <Avatar
+            size="md"
+            name="Erick Souza Basso"
+            src="https://github.com/ErickBss.png"
+          />
+        </Flex>
       </Flex>
     </Flex>
   )
