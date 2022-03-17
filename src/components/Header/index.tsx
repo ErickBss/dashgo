@@ -33,7 +33,7 @@ export function Header() {
           fontSize="24"
           variant="unstyled"
           onClick={onOpen}
-          mt={3}
+          mt={2}
           mr={2}
         />
       )}
