@@ -9,20 +9,30 @@ import {
   RiGitMergeLine,
   RiInputMethodLine,
 } from 'react-icons/ri'
+import Link from 'next/link'
+import { IsActive } from '../IsActive'
 
 export function SideBarNav() {
   return (
     <Stack spacing={12} align="flex-start">
       <NavSection title="GENEREAL">
-        <NavLink icon={RiDashboardLine}>Dashboard</NavLink>
+        <IsActive href="/dashboard" passHref>
+          <NavLink icon={RiDashboardLine}>Dashboard</NavLink>
+        </IsActive>
 
-        <NavLink icon={RiContactsLine}>Users</NavLink>
+        <IsActive href="/users" passHref>
+          <NavLink icon={RiContactsLine}>Users</NavLink>
+        </IsActive>
       </NavSection>
 
       <NavSection title="AUTOMATION">
-        <NavLink icon={RiInputMethodLine}>Forms</NavLink>
+        <IsActive href="/forms" passHref>
+          <NavLink icon={RiInputMethodLine}>Forms</NavLink>
+        </IsActive>
 
-        <NavLink icon={RiGitMergeLine}>Automation</NavLink>
+        <IsActive href="/automation" passHref>
+          <NavLink icon={RiGitMergeLine}>Automation</NavLink>
+        </IsActive>
       </NavSection>
     </Stack>
   )
