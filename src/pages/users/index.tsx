@@ -14,6 +14,7 @@ import {
   Tr,
 } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { RiAddLine, RiPencilLine } from 'react-icons/ri'
 import { Header } from '../../components/Header/index'
 import { IsActive } from '../../components/IsActive'
@@ -21,6 +22,12 @@ import { Pagination } from '../../components/Pagination/index'
 import { SideBar } from '../../components/Sidebar/index'
 
 export default function UsersList() {
+  useEffect(() => {
+    fetch('http://localhost:3000/api/users')
+      .then((response) => response.json())
+      .then((response) => console.log(response))
+  }, [])
+
   return (
     <Box>
       <Header />

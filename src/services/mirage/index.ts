@@ -1,4 +1,6 @@
-import { createServer, Model } from 'miragejs'
+import { createServer, Model, Factory } from 'miragejs'
+
+import faker from 'faker'
 
 type User = {
   name: string
@@ -13,11 +15,32 @@ export function makeServer() {
       user: Model.extend<Partial<User>>({}),
     },
 
+    factories: {
+      // used for create a big number of data
+      user: Factory.extend({
+        name(i: number) {
+          return `User ${i + 1}`
+        },
+
+        email() {
+          return faker.internet.email().toLowerCase()
+        },
+
+        createdAt() {
+          return faker.date.recent(10)
+        },
+      }),
+    },
+
+    seeds(server) {
+      server.createList('user', 200)
+    },
+
     routes() {
       this.namespace = 'api' // define the http way route
       this.timing = 750 // delay to simulate a real api response
 
-      this.get('/user')
+      this.get('/users')
       this.post('/user')
 
       this.namespace = '' // reset the route way to prevent a conflict with the next api route
