@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -21,12 +22,16 @@ import { IsActive } from '../../components/IsActive'
 import { Pagination } from '../../components/Pagination/index'
 import { SideBar } from '../../components/Sidebar/index'
 
+import { useQuery } from 'react-query'
+
 export default function UsersList() {
-  useEffect(() => {
-    fetch('http://localhost:3000/api/users')
-      .then((response) => response.json())
-      .then((response) => console.log(response))
-  }, [])
+  const { data, isLoading, error } = useQuery('usersList', async () => {
+    const response = await fetch('http://localhost:3000/api/users')
+
+    const data = response.json()
+
+    return data
+  })
 
   return (
     <Box>
@@ -54,56 +59,68 @@ export default function UsersList() {
             </IsActive>
           </Flex>
 
-          <Table colorScheme="whiteAlpha">
-            <Thead>
-              <Tr>
-                <Th px="6" color="gray.300" width="8">
-                  <Checkbox colorScheme="pink" />
-                </Th>
-                <Th>User</Th>
-                <Th>Register data</Th>
-                <Th width={8}></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td px="6">
-                  <Checkbox colorScheme="pink" />
-                </Td>
+          {isLoading ? (
+            <Flex justify="center">
+              <Spinner />
+            </Flex>
+          ) : error ? (
+            <Flex justify="center">
+              <Text>Fail getting the data user</Text>
+            </Flex>
+          ) : (
+            <>
+              <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th px="6" color="gray.300" width="8">
+                      <Checkbox colorScheme="pink" />
+                    </Th>
+                    <Th>User</Th>
+                    <Th>Register data</Th>
+                    <Th width={8}></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td px="6">
+                      <Checkbox colorScheme="pink" />
+                    </Td>
 
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Erick Souza Basso</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      erickbasso22@gmail.com
-                    </Text>
-                  </Box>
-                </Td>
-                <Td>March 15, 2022</Td>
-              </Tr>
-            </Tbody>
+                    <Td>
+                      <Box>
+                        <Text fontWeight="bold">Erick Souza Basso</Text>
+                        <Text fontSize="sm" color="gray.300">
+                          erickbasso22@gmail.com
+                        </Text>
+                      </Box>
+                    </Td>
+                    <Td>March 15, 2022</Td>
+                  </Tr>
+                </Tbody>
 
-            <Tbody>
-              <Tr>
-                <Td px="6">
-                  <Checkbox colorScheme="pink" />
-                </Td>
+                <Tbody>
+                  <Tr>
+                    <Td px="6">
+                      <Checkbox colorScheme="pink" />
+                    </Td>
 
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Erick Souza Basso</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      erickbasso22@gmail.com
-                    </Text>
-                  </Box>
-                </Td>
+                    <Td>
+                      <Box>
+                        <Text fontWeight="bold">Erick Souza Basso</Text>
+                        <Text fontSize="sm" color="gray.300">
+                          erickbasso22@gmail.com
+                        </Text>
+                      </Box>
+                    </Td>
 
-                <Td>March 15, 2022</Td>
-              </Tr>
-            </Tbody>
-          </Table>
+                    <Td>March 15, 2022</Td>
+                  </Tr>
+                </Tbody>
+              </Table>
 
-          <Pagination />
+              <Pagination />
+            </>
+          )}
         </Box>
       </Flex>
     </Box>
