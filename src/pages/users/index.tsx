@@ -23,28 +23,26 @@ import { SideBar } from '../../components/Sidebar/index'
 
 import { useQuery } from 'react-query'
 
-type UsersListData = {
-  data: [
-    {
-      id: number
-      name: string
-      email: string
-      createdAt: string
-    },
-  ]
+import { api } from '../../services/api'
 
-  isFetching: boolean
-  isLoading: boolean
-  error: unknown
+type UsersListData = {
+  data: {
+    users: [
+      {
+        id: number
+        name: string
+        email: string
+        createdAt: string
+      },
+    ]
+  }
 }
 
 export default function UsersList() {
-  const { data, isLoading, isFetching, error }: UsersListData = useQuery(
+  const { data, isLoading, isFetching, error } = useQuery(
     'usersList',
     async () => {
-      const response = await fetch('http://localhost:3000/api/users')
-
-      const data = await response.json()
+      const { data }: UsersListData = await api('/users')
 
       const users = data.users.map((user) => ({
         id: user.id,
