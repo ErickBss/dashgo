@@ -20,47 +20,10 @@ import { Header } from '../../components/Header/index'
 import { IsActive } from '../../components/IsActive'
 import { Pagination } from '../../components/Pagination/index'
 import { SideBar } from '../../components/Sidebar/index'
-
-import { useQuery } from 'react-query'
-
-import { api } from '../../services/api'
-
-type UsersListData = {
-  data: {
-    users: [
-      {
-        id: number
-        name: string
-        email: string
-        createdAt: string
-      },
-    ]
-  }
-}
+import { useUsers } from '../../services/hooks/useUsers'
 
 export default function UsersList() {
-  const { data, isLoading, isFetching, error } = useQuery(
-    'usersList',
-    async () => {
-      const { data }: UsersListData = await api('/users')
-
-      const users = data.users.map((user) => ({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        }),
-      }))
-
-      return users
-    },
-    {
-      staleTime: 1000 * 5, // 5 seconds
-    },
-  )
+  const { data, isLoading, isFetching, error } = useUsers()
 
   return (
     <Box>
