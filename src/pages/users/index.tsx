@@ -14,9 +14,8 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import Link from 'next/link'
-import { useEffect } from 'react'
-import { RiAddLine, RiPencilLine } from 'react-icons/ri'
+
+import { RiAddLine } from 'react-icons/ri'
 import { Header } from '../../components/Header/index'
 import { IsActive } from '../../components/IsActive'
 import { Pagination } from '../../components/Pagination/index'
@@ -24,14 +23,46 @@ import { SideBar } from '../../components/Sidebar/index'
 
 import { useQuery } from 'react-query'
 
+type UsersListData = {
+  data: [
+    {
+      id: number
+      name: string
+      email: string
+      createdAt: string
+    },
+  ]
+
+  isFetching: boolean
+  isLoading: boolean
+  error: unknown
+}
+
 export default function UsersList() {
-  const { data, isLoading, error } = useQuery('usersList', async () => {
-    const response = await fetch('http://localhost:3000/api/users')
+  const { data, isLoading, isFetching, error }: UsersListData = useQuery(
+    'usersList',
+    async () => {
+      const response = await fetch('http://localhost:3000/api/users')
 
-    const data = response.json()
+      const data = await response.json()
 
-    return data
-  })
+      const users = data.users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        }),
+      }))
+
+      return users
+    },
+    {
+      staleTime: 1000 * 5, // 5 seconds
+    },
+  )
 
   return (
     <Box>
@@ -44,6 +75,9 @@ export default function UsersList() {
           <Flex mb={8} justify="space-between" alignItems="center">
             <Heading size="lg" fontWeight="normal">
               Users
+              {!isLoading && isFetching && (
+                <Spinner fontSize="x-small" color="gray.500" ml="4" />
+              )}
             </Heading>
 
             <IsActive href="/users/create" passHref>
@@ -81,40 +115,25 @@ export default function UsersList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td px="6">
-                      <Checkbox colorScheme="pink" />
-                    </Td>
+                  {data.map((user) => {
+                    return (
+                      <Tr key={user.id}>
+                        <Td px="6">
+                          <Checkbox colorScheme="pink" />
+                        </Td>
 
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Erick Souza Basso</Text>
-                        <Text fontSize="sm" color="gray.300">
-                          erickbasso22@gmail.com
-                        </Text>
-                      </Box>
-                    </Td>
-                    <Td>March 15, 2022</Td>
-                  </Tr>
-                </Tbody>
-
-                <Tbody>
-                  <Tr>
-                    <Td px="6">
-                      <Checkbox colorScheme="pink" />
-                    </Td>
-
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Erick Souza Basso</Text>
-                        <Text fontSize="sm" color="gray.300">
-                          erickbasso22@gmail.com
-                        </Text>
-                      </Box>
-                    </Td>
-
-                    <Td>March 15, 2022</Td>
-                  </Tr>
+                        <Td>
+                          <Box>
+                            <Text fontWeight="bold">{user.name}</Text>
+                            <Text fontSize="sm" color="gray.300">
+                              {user.email}
+                            </Text>
+                          </Box>
+                        </Td>
+                        <Td>{user.createdAt}</Td>
+                      </Tr>
+                    )
+                  })}
                 </Tbody>
               </Table>
 

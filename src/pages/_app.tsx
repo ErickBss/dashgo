@@ -7,6 +7,7 @@ import { SidebarDrawerProvider } from '../components/contexts/SidebarDrawerConte
 import { makeServer } from '../services/mirage'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 if (process.env.NODE_ENV === 'development') {
   makeServer()
@@ -22,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </SidebarDrawerProvider>
       </ChakraProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   )
 }

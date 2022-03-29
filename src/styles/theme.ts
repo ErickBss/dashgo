@@ -24,6 +24,7 @@ const customTheme = {
   styles: {
     global: {
       body: {
+        overflowX: 'hidden',
         bg: 'gray.900', // bg --> background
         color: 'gray.50',
       },
