@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Link,
   Spinner,
   Table,
   Tbody,
@@ -21,11 +22,27 @@ import { Header } from '../../components/Header/index'
 import { IsActive } from '../../components/IsActive'
 import { Pagination } from '../../components/Pagination/index'
 import { SideBar } from '../../components/Sidebar/index'
+import { api } from '../../services/api'
 import { useUsers } from '../../services/hooks/useUsers'
+import { queryClient } from '../../services/queryClient'
 
 export default function UsersList() {
   const [page, setPage] = useState(1)
   const { data, isLoading, isFetching, error } = useUsers(page)
+
+  async function handlePrefetchUser(userId: number) {
+    await queryClient.prefetchQuery(
+      ['user', userId],
+      async () => {
+        const { data } = await api.get(`/users/${userId}`)
+
+        return data
+      },
+      {
+        staleTime: 1000 * 60 * 10, // 10 minutes
+      },
+    )
+  }
 
   return (
     <Box>
@@ -87,7 +104,12 @@ export default function UsersList() {
 
                         <Td>
                           <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Link
+                              color="purple.400"
+                              onMouseEnter={() => handlePrefetchUser(user.id)}
+                            >
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </Link>
                             <Text fontSize="sm" color="gray.300">
                               {user.email}
                             </Text>
