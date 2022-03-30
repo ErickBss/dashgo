@@ -14,6 +14,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
+import { useState } from 'react'
 
 import { RiAddLine } from 'react-icons/ri'
 import { Header } from '../../components/Header/index'
@@ -23,7 +24,8 @@ import { SideBar } from '../../components/Sidebar/index'
 import { useUsers } from '../../services/hooks/useUsers'
 
 export default function UsersList() {
-  const { data, isLoading, isFetching, error } = useUsers()
+  const [page, setPage] = useState(1)
+  const { data, isLoading, isFetching, error } = useUsers(page)
 
   return (
     <Box>
@@ -76,7 +78,7 @@ export default function UsersList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((user) => {
+                  {data.users.map((user) => {
                     return (
                       <Tr key={user.id}>
                         <Td px="6">
@@ -98,7 +100,11 @@ export default function UsersList() {
                 </Tbody>
               </Table>
 
-              <Pagination />
+              <Pagination
+                totalCountOFRegisters={data.totalCount}
+                currentPage={page}
+                onPageChange={setPage}
+              />
             </>
           )}
         </Box>

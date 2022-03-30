@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query'
+import { NumberSchema } from 'yup'
 import { api } from '../api'
 
 type UsersListData = {
@@ -8,8 +9,19 @@ type UsersListData = {
   createdAt: string
 }
 
-async function getUsers(): Promise<UsersListData[]> {
-  const { data } = await api('/users')
+type GetUserResponse = {
+  totalCount: number
+  users: UsersListData[]
+}
+
+async function getUsers(page: number): Promise<GetUserResponse> {
+  const { data, headers } = await api('/users', {
+    params: {
+      page,
+    },
+  })
+
+  const totalCount = Number(headers['x-total-count'])
 
   const users = data.users.map((user) => ({
     id: user.id,
@@ -22,11 +34,11 @@ async function getUsers(): Promise<UsersListData[]> {
     }),
   }))
 
-  return users
+  return { users, totalCount }
 }
 
-export function useUsers() {
-  return useQuery('usersList', getUsers, {
+export function useUsers(page: number) {
+  return useQuery(['usersList', page], () => getUsers(page), {
     staleTime: 1000 * 5, // 5 seconds
   })
 }
